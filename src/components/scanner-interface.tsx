@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Loader2, ScanLine } from 'lucide-react';
+import { Loader2, Sparkles, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { findProductById } from '@/ai/flows/find-product-by-id';
 import { productDatabase, type Product } from '@/lib/products';
@@ -59,14 +59,19 @@ export default function ScannerInterface({
       setTimeout(() => {
         setScanState('idle');
         setScanMessage('');
-      }, 1500);
+      }, 2000);
     }
   };
 
   return (
-    <Card className="w-full shadow-lg overflow-hidden">
-      <CardContent className="p-6 space-y-4">
-        <h3 className="text-lg font-semibold">Enter Product ID</h3>
+    <Card className="w-full shadow-lg">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <Sparkles className="h-6 w-6 text-primary" />
+          Enter Product ID
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 pt-2 space-y-4">
         <div className="flex items-center space-x-2">
           <Input
             type="text"
@@ -79,33 +84,36 @@ export default function ScannerInterface({
                 handleScan();
               }
             }}
+            className="text-lg h-12"
           />
           <Button
             onClick={handleScan}
             disabled={!productId || scanState !== 'idle'}
+            size="lg"
+            className="h-12"
           >
             {scanState === 'scanning' ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
-              'Add'
+              <>
+                <PlusCircle className="mr-2 h-5 w-5" /> Add to Cart
+              </>
             )}
           </Button>
         </div>
-        {scanState !== 'idle' && (
-          <div className="text-center p-4">
-            {scanState === 'scanning' && (
-              <div className="flex items-center justify-center text-muted-foreground">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>{scanMessage}</span>
-              </div>
-            )}
-            {scanState === 'success' && (
-              <p className="text-green-600 font-semibold animate-pulse">
-                {scanMessage}
-              </p>
-            )}
-          </div>
-        )}
+        <div className="h-6 mt-2 text-center">
+          {scanState === 'scanning' && (
+            <div className="flex items-center justify-center text-muted-foreground">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <span>{scanMessage}</span>
+            </div>
+          )}
+          {scanState === 'success' && (
+            <p className="text-green-600 font-semibold animate-pulse">
+              {scanMessage}
+            </p>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
