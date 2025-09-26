@@ -1,4 +1,4 @@
 import { config } from 'dotenv';
 config();
 
-import '@/ai/flows/enhance-scan-with-reasoning.ts';
+import '@/ai/flows/find-product-by-id.ts';
